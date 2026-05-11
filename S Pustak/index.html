@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S Pustak - Premium Notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Default: Light (White) Theme */
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent-color: #000000;
+            --accent-text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-hover: rgba(255, 255, 255, 1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --danger: #ff3b30;
+            --warning: #ffcc00;
+            --success: #34c759;
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --input-bg: rgba(0, 0, 0, 0.03);
+            --divider: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Grey Theme */
+            --bg-gradient: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%);
+            --glass-bg: rgba(44, 44, 46, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f2f2f7;
+            --text-secondary: #aeaeb2;
+            --accent-color: #ffffff;
+            --accent-text: #000000;
+            --card-bg: rgba(58, 58, 60, 0.8);
+            --card-hover: rgba(72, 72, 74, 1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --modal-bg: rgba(44, 44, 46, 0.95);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --divider: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="black"] {
+            /* Pure Black Theme */
+            --bg-gradient: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+            --glass-bg: rgba(15, 15, 15, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #8e8e93;
+            --accent-color: #ffffff;
+            --accent-text: #000000;
+            --card-bg: rgba(28, 28, 30, 0.8);
+            --card-hover: rgba(44, 44, 46, 1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --modal-bg: rgba(10, 10, 10, 0.95);
+            --input-bg: rgba(255, 255, 255, 0.08);
+            --divider: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* Glassmorphism Container */
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            height: 90vh;
+            max-height: 850px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* Header */
+        header {
+            padding: 30px 24px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--divider);
+            z-index: 10;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--input-bg);
+        }
+
+        .theme-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Controls: Search & Filters */
+        .controls {
+            padding: 20px 24px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 9;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 20px;
+            border: none;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .search-bar::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-bar:focus {
+            background: var(--card-hover);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: none; /* Firefox */
+            justify-content: center;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .category-pill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--input-bg);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .category-pill.active {
+            background: var(--accent-color);
+            color: var(--accent-text);
+        }
+
+        /* Notes Area */
+        .notes-container {
+            flex-grow: 1;
+            padding: 10px 24px 100px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scrollbar-width: none;
+        }
+
+        .notes-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .note-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            animation: slideIn 0.4s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .note-card:hover {
+            transform: translateY(-2px) scale(1.01);
+            background: var(--card-hover);
+            box-shadow: var(--shadow);
+        }
+
+        .note-card:active {
+            transform: scale(0.98);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .note-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .pin-icon {
+            color: var(--warning);
+            font-size: 14px;
+        }
+
+        .note-preview {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .note-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tag {
+            background: var(--input-bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* FAB */
+        .fab {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: var(--accent-color);
+            color: var(--accent-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            z-index: 20;
+        }
+
+        .fab:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .fab:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        /* Footer */
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--divider);
+            z-index: 10;
+        }
+
+        /* Editor Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .editor-modal {
+            width: 100%;
+            max-width: 500px;
+            height: 90vh;
+            max-height: 850px;
+            background: var(--modal-bg);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 501px) {
+            .editor-modal {
+                border-radius: 32px;
+                height: 85vh;
+                transform: scale(0.9) translateY(20px);
+            }
+            .modal-overlay.active .editor-modal {
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .editor-modal {
+                height: 100vh;
+                max-height: none;
+                border-radius: 32px 32px 0 0;
+                align-self: flex-end;
+            }
+            .app-container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+                border: none;
+            }
+        }
+
+        .modal-overlay.active .editor-modal {
+            transform: translateY(0);
+        }
+
+        .editor-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            background: var(--input-bg);
+        }
+
+        .icon-btn.danger {
+            color: var(--danger);
+        }
+
+        .save-indicator {
+            font-size: 12px;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+        }
+
+        .editor-content {
+            flex-grow: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .editor-title {
+            font-size: 24px;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            outline: none;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+
+        .editor-title::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .editor-body {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 16px;
+            line-height: 1.6;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            min-height: 200px;
+        }
+
+        .editor-body::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .editor-meta {
+            padding: 16px 24px;
+            border-top: 1px solid var(--divider);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: var(--glass-bg);
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            width: 60px;
+        }
+
+        .editor-select, .editor-tags-input {
+            background: var(--input-bg);
+            border: none;
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            flex-grow: 1;
+        }
+
+        .editor-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: var(--input-bg);
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--card-hover);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        .deleting {
+            animation: fadeOut 0.3s forwards;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 20px;
+            opacity: 0.7;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div style="width:40px"></div> <!-- Spacer for balance -->
+            <h1 class="app-title">S Pustak</h1>
+            <button class="theme-btn" id="themeToggle" title="Toggle Theme">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </header>
+
+        <div class="controls">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search notes...">
+            <div class="categories" id="categoryFilter">
+                <div class="category-pill active" data-cat="All">All</div>
+                <div class="category-pill" data-cat="Personal">Personal</div>
+                <div class="category-pill" data-cat="Work">Work</div>
+                <div class="category-pill" data-cat="Study">Study</div>
+                <div class="category-pill" data-cat="Ideas">Ideas</div>
+            </div>
+        </div>
+
+        <div class="notes-container" id="notesList">
+            <!-- Notes will be injected here -->
+        </div>
+
+        <button class="fab" id="addNoteBtn" title="New Note">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+
+        <footer>
+            <p>Made by Sengar Production</p>
+            <p>&copy; <span id="year"></span> S Pustak. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Editor Modal -->
+    <div class="modal-overlay" id="editorOverlay">
+        <div class="editor-modal">
+            <div class="editor-header">
+                <button class="icon-btn" id="closeEditorBtn" title="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <span class="save-indicator" id="saveIndicator">Saved</span>
+                <div class="editor-actions">
+                    <button class="icon-btn" id="pinNoteBtn" title="Pin Note">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                        </svg>
+                    </button>
+                    <button class="icon-btn danger" id="deleteNoteBtn" title="Delete Note">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" id="exportNoteBtn" title="Export Note">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="editor-content">
+                <input type="text" class="editor-title" id="noteTitle" placeholder="Note Title">
+                <textarea class="editor-body" id="noteContent" placeholder="Start typing..."></textarea>
+            </div>
+            <div class="editor-meta">
+                <div class="meta-row">
+                    <span class="meta-label">Category</span>
+                    <select class="editor-select" id="noteCategory">
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="Study">Study</option>
+                        <option value="Ideas">Ideas</option>
+                    </select>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Tags</span>
+                    <input type="text" class="editor-tags-input" id="noteTags" placeholder="e.g. important, draft (comma separated)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let notes = JSON.parse(localStorage.getItem('spustak_notes')) || [];
+        let currentTheme = localStorage.getItem('spustak_theme') || 'light';
+        let currentNoteId = null;
+        let saveTimeout = null;
+
+        // UI Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const notesList = document.getElementById('notesList');
+        const addNoteBtn = document.getElementById('addNoteBtn');
+        const editorOverlay = document.getElementById('editorOverlay');
+        const closeEditorBtn = document.getElementById('closeEditorBtn');
+        const deleteNoteBtn = document.getElementById('deleteNoteBtn');
+        const pinNoteBtn = document.getElementById('pinNoteBtn');
+        const exportNoteBtn = document.getElementById('exportNoteBtn');
+        
+        // Editor Fields
+        const noteTitleInput = document.getElementById('noteTitle');
+        const noteContentInput = document.getElementById('noteContent');
+        const noteCategorySelect = document.getElementById('noteCategory');
+        const noteTagsInput = document.getElementById('noteTags');
+        const saveIndicator = document.getElementById('saveIndicator');
+
+        // Audio Context for subtle interactions
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function playClickSound() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.05);
+            
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // --- Initialization ---
+        function init() {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            applyTheme(currentTheme);
+            renderNotes();
+            setupEventListeners();
+        }
+
+        // --- Theme System ---
+        const themes = ['light', 'dark', 'black'];
+        
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('spustak_theme', theme);
+            currentTheme = theme;
+
+            // Update Icon
+            if (theme === 'light') {
+                themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+            } else if (theme === 'dark') {
+                themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+            } else {
+                themeIcon.innerHTML = `<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>`; // Representation for pure black/contrast
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            playClickSound();
+            let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+            applyTheme(themes[nextIndex]);
+        });
+
+        // --- Rendering ---
+        function renderNotes() {
+            notesList.innerHTML = '';
+            
+            const query = searchInput.value.toLowerCase();
+            const activeCatEl = document.querySelector('.category-pill.active');
+            const category = activeCatEl ? activeCatEl.dataset.cat : 'All';
+
+            let filteredNotes = notes.filter(note => {
+                const matchesSearch = note.title.toLowerCase().includes(query) || note.content.toLowerCase().includes(query) || note.tags.some(t => t.toLowerCase().includes(query));
+                const matchesCategory = category === 'All' || note.category === category;
+                return matchesSearch && matchesCategory;
+            });
+
+            // Sort: Pinned first, then by last edited
+            filteredNotes.sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return b.lastEdited - a.lastEdited;
+            });
+
+            if (filteredNotes.length === 0) {
+                notesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <h3>No notes found</h3>
+                        <p style="font-size: 13px; margin-top: 8px;">Create a new note to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let hasPinned = filteredNotes.some(n => n.pinned);
+            let hasUnpinned = filteredNotes.some(n => !n.pinned);
+
+            if (hasPinned) {
+                const title = document.createElement('div');
+                title.className = 'section-title';
+                title.textContent = 'Pinned';
+                notesList.appendChild(title);
+
+                filteredNotes.filter(n => n.pinned).forEach((note, index) => {
+                    notesList.appendChild(createNoteElement(note, index));
+                });
+            }
+
+            if (hasPinned && hasUnpinned) {
+                const title = document.createElement('div');
+                title.className = 'section-title';
+                title.textContent = 'Others';
+                title.style.marginTop = '20px';
+                notesList.appendChild(title);
+            }
+
+            filteredNotes.filter(n => !n.pinned).forEach((note, index) => {
+                notesList.appendChild(createNoteElement(note, index));
+            });
+        }
+
+        function createNoteElement(note, index) {
+            const div = document.createElement('div');
+            div.className = 'note-card';
+            div.style.animationDelay = `${index * 0.05}s`;
+            div.dataset.id = note.id;
+
+            const date = new Date(note.lastEdited);
+            const timeString = date.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ', ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const tagsHtml = note.tags.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('');
+            const moreTags = note.tags.length > 2 ? `<span class="tag">+${note.tags.length - 2}</span>` : '';
+
+            div.innerHTML = `
+                <div class="note-header">
+                    <div class="note-title">${note.title || 'Untitled Note'}</div>
+                    ${note.pinned ? '<div class="pin-icon">★</div>' : ''}
+                </div>
+                <div class="note-preview">${note.content.substring(0, 100) || 'No content...'}</div>
+                <div class="note-meta">
+                    <div>${timeString}</div>
+                    <div class="note-tags">${tagsHtml}${moreTags}</div>
+                </div>
+            `;
+
+            div.addEventListener('click', () => openEditor(note.id));
+            return div;
+        }
+
+        // --- Editor Logic ---
+        function openEditor(id = null) {
+            playClickSound();
+            currentNoteId = id;
+            
+            if (id) {
+                const note = notes.find(n => n.id === id);
+                if (note) {
+                    noteTitleInput.value = note.title;
+                    noteContentInput.value = note.content;
+                    noteCategorySelect.value = note.category;
+                    noteTagsInput.value = note.tags.join(', ');
+                    updatePinButton(note.pinned);
+                }
+            } else {
+                currentNoteId = Date.now().toString();
+                noteTitleInput.value = '';
+                noteContentInput.value = '';
+                
+                // Set default category based on active filter if not 'All'
+                const activeCatEl = document.querySelector('.category-pill.active');
+                if(activeCatEl && activeCatEl.dataset.cat !== 'All') {
+                    noteCategorySelect.value = activeCatEl.dataset.cat;
+                } else {
+                    noteCategorySelect.value = 'Personal';
+                }
+                
+                noteTagsInput.value = '';
+                updatePinButton(false);
+                
+                // Create skeleton note
+                const newNote = {
+                    id: currentNoteId,
+                    title: '',
+                    content: '',
+                    category: noteCategorySelect.value,
+                    tags: [],
+                    pinned: false,
+                    lastEdited: Date.now(),
+                    createdAt: Date.now()
+                };
+                notes.push(newNote);
+            }
+
+            editorOverlay.classList.add('active');
+            setTimeout(() => {
+                if(!id) noteContentInput.focus();
+            }, 400);
+        }
+
+        function closeEditor() {
+            playClickSound();
+            saveNote(true); // Force final save
+            
+            // Clean up empty notes
+            const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+            if (noteIndex !== -1) {
+                const note = notes[noteIndex];
+                if (!note.title.trim() && !note.content.trim()) {
+                    notes.splice(noteIndex, 1);
+                    saveToLocal();
+                }
+            }
+
+            editorOverlay.classList.remove('active');
+            currentNoteId = null;
+            renderNotes();
+        }
+
+        function saveNote(immediate = false) {
+            if (!currentNoteId) return;
+
+            const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+            if (noteIndex === -1) return;
+
+            const tags = noteTagsInput.value.split(',')
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+
+            notes[noteIndex] = {
+                ...notes[noteIndex],
+                title: noteTitleInput.value,
+                content: noteContentInput.value,
+                category: noteCategorySelect.value,
+                tags: tags,
+                lastEdited: Date.now()
+            };
+
+            saveToLocal();
+            
+            // UI Feedback
+            saveIndicator.textContent = 'Saved';
+            saveIndicator.classList.add('visible');
+            setTimeout(() => {
+                saveIndicator.classList.remove('visible');
+            }, 2000);
+        }
+
+        function autoSave() {
+            saveIndicator.textContent = 'Saving...';
+            saveIndicator.classList.add('visible');
+            
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveNote();
+            }, 1000);
+        }
+
+        function saveToLocal() {
+            localStorage.setItem('spustak_notes', JSON.stringify(notes));
+        }
+
+        function updatePinButton(isPinned) {
+            if (isPinned) {
+                pinNoteBtn.style.color = 'var(--warning)';
+            } else {
+                pinNoteBtn.style.color = 'var(--text-primary)';
+            }
+        }
+
+        // --- Event Listeners ---
+        function setupEventListeners() {
+            // Main UI
+            addNoteBtn.addEventListener('click', () => openEditor());
+            
+            searchInput.addEventListener('input', renderNotes);
+            
+            categoryFilter.addEventListener('click', (e) => {
+                if (e.target.classList.contains('category-pill')) {
+                    playClickSound();
+                    document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
+                    e.target.classList.add('active');
+                    renderNotes();
+                }
+            });
+
+            // Editor
+            closeEditorBtn.addEventListener('click', closeEditor);
+            
+            [noteTitleInput, noteContentInput, noteCategorySelect, noteTagsInput].forEach(el => {
+                el.addEventListener('input', autoSave);
+            });
+
+            deleteNoteBtn.addEventListener('click', () => {
+                playClickSound();
+                if (confirm('Delete this note?')) {
+                    notes = notes.filter(n => n.id !== currentNoteId);
+                    saveToLocal();
+                    
+                    // Add deleting class to modal for quick visual feedback
+                    document.querySelector('.editor-modal').style.opacity = '0';
+                    setTimeout(() => {
+                        document.querySelector('.editor-modal').style.opacity = '1';
+                        closeEditor();
+                    }, 300);
+                }
+            });
+
+            pinNoteBtn.addEventListener('click', () => {
+                playClickSound();
+                const note = notes.find(n => n.id === currentNoteId);
+                if (note) {
+                    note.pinned = !note.pinned;
+                    updatePinButton(note.pinned);
+                    saveNote(true);
+                }
+            });
+
+            exportNoteBtn.addEventListener('click', () => {
+                playClickSound();
+                const note = notes.find(n => n.id === currentNoteId);
+                if (note) {
+                    const textToCopy = `${note.title}\n\n${note.content}`;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const originalHtml = exportNoteBtn.innerHTML;
+                        exportNoteBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                        setTimeout(() => {
+                            exportNoteBtn.innerHTML = originalHtml;
+                        }, 2000);
+                    });
+                }
+            });
+
+            // Prevent scroll on body when modal is open on mobile
+            editorOverlay.addEventListener('touchmove', (e) => {
+                if(e.target === editorOverlay) e.preventDefault();
+            }, {passive: false});
+        }
+
+        // Run
+        init();
+    </script>
+</body>
+</html>
