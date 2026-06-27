@@ -1,4 +1,4 @@
-# 📒 S-Pustak - Notes App
+# 📒 Simple Notes App
 
 **S-Pustak** is a simple and intuitive notes application built using **HTML, CSS, and JavaScript**. It helps users capture ideas, manage notes, and keep track of important tasks in an organized manner.
 
